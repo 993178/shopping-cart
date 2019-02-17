@@ -10,7 +10,9 @@ var passport = require('passport');   // voor encryptie
 var flash = require('connet-flash');  // om boodschappen via de view te kunnen doorgeven
 var validator = require('express-validator');
 
-var indexRouter = require('./routes/index');
+var indexRouter = require('./routes/index');  // bij Discount Jonas heet dit routes
+var userRouter = require('./routes/user');    // bij Discount Jonas heet dit UserRoutes
+
 
 var app = express();
 mongoose.connect('localhost:27017/shopping');
@@ -33,6 +35,12 @@ app.use(passport.initialize());
 app.use(passport.session());  // ook na session     docs op passportjs.org (althans toen) met een hele zoot strategies; we gebruiken passport-local, maar je kunt dit dus ook gebruiken om mensen via Facebook of Twitter of wat dan ook te laten inloggen
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {            // login status available in all views
+  res.locals.login = req.isAuthenticated();
+  next();
+})
+
+app.use('/user', userRouter);   // eerst de /user afvangen, want dit begint ook met /, net als die hieronder! Specifiek voor algemeen.
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler

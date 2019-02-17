@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="/">Navbar</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -17,10 +17,15 @@
           <i class="fa fa-user" aria-hidden="true"></i> User
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">User Action</a>
-          <a class="dropdown-item" href="#">Another user action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+          {{!-- bij Discount Jonas is dit een ul met li's, hier dus een div met a's --}}
+          {{# if login}}
+            <a class="dropdown-item" href="/user/profile">Gebruikersprofiel</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/user/logout">Uitloggen</a>
+          {{ else }}
+            <a class="dropdown-item" href="/user/signin">Inloggen</a>
+            <a class="dropdown-item" href="/user/signup">Account aanmaken</a>
+          {{/if}}
         </div>
       </li>
       {{!-- <li class="nav-item">
