@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var Product = require('../models/product');   // productmodel binnenhalen (het schema, niet dat seedergedoe)
 var csrf = require('csurf');
+var passport = require('passport');
+var Product = require('../models/product');   // productmodel binnenhalen (het schema, niet dat seedergedoe)
 
 csrfProtection = csrf();
 router.use(csrfProtection);   // 'Express, alle routes moeten beschermd worden door csrfProtection'
@@ -19,11 +20,29 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/user/signup', function(req, res, next) {
-  res.render('user/signup', {csrfToken: req.csrfToken()});
+  var messages = req.flash('error');    // de boodschap over wachtwoord al in gebruik komt binnen onder de vlag 'error', hier wordt ie 'messages'
+  res.render('user/signup', {csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length > 0});  // hasErrors omdat we in die {{ quasi-script }} in de hbs beperkte logicamogelijkheden hebben
 });
 
-router.post('/user/signup', function (req, res, next) {
-  res.redirect('/');  // tijdelijk
-})
+router.post('/user/signup', passport.authenticate('local.signup', {   // bij aanmaak nieuwe user
+  succesRedirect: '/user/profile',                                         // bij succes ziet ie zijn profiel (? lijkt me stom)
+  failureRedirect: '/user/signup',                                         // bij falen blijft ie bij sign up
+  failureFlash: true                                                  // en ziet dan die boodschap dat zijn mailadres al in gebruik is
+}));
+
+router.get('/user/profile', function(req, res, next) {
+  res.render('user/profile');
+});
+
+router.get('/user/signin', function(req, res, next) {
+  var messages = req.flash('error');    // kopie signup
+  res.render('user/signin', {csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length > 0});
+});
+
+router.post('/user/signin', passport.authenticate('local.signin', {
+  succesRedirect: '/user/profile',
+  failureRedirect: '/user/signin',
+  failureFlash: true
+}));
 
 module.exports = router;
