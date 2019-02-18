@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Product = require('../models/product');   // productmodel binnenhalen (het schema, niet dat seedergedoe)
+var Cart = require('../models/cart');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -12,6 +13,20 @@ router.get('/', function(req, res, next) {
     }
     res.render('shop/index', { title: 'Shopping cart', producten: docs });  // renderfunctie met te renderen dingen, aangevuld met de products die hier docs heten. Deze moet in de Products.find, anders gebeurt het renderen (synchronous) voordat find (asynchronous) klaar is
   });
+});
+
+router.get('/add-to-cart/:id', function(req, res, next) {   // Discount Jonas: next kun je altijd weglaten als je die niet gebruikt, hij zet hem neer want conventie
+  var productId = req.params.id;
+  var cart = new cart(req.session.cart ? req.session.cart : { items: {}});  // nieuw karretje maken en daar oud karretje ingooien als argument - ALS die bestaat, anders een leeg object. Je kunt hier ook een mal van maken: {items: {}, totalQty: 0, totalPrice: 0} ipv de pipe operators in cart.js die Discount Jonas prefereert
+
+  Product.findById(productId, function(err, product) {
+    if (err) {
+      return res.redirect('/');   // nogal summier - er gaat iets fout en je wordt teruggestuurd naar de homepage...
+    }
+    cart.add(product, product.id);
+    req.session.cart = cart;    // wordt ook automatisch opgeslagen
+    res.redirect('/');          // dus als het goed gaat, wordt je óók teruggestuurd naar de homepage...!! Lekker gebruikersvriendelijk
+  })
 });
 
 
