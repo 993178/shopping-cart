@@ -1,6 +1,6 @@
 var Product = require('../models/product');
 var mongoose = require('mongoose');             // tijdelijk    Dit is niet de normale gang van zaken voor de app, Maximillian doet
-mongoose.connect('localhost:27017/shopping');   // tijdelijk    dit tijdens het developpen, handmatig
+mongoose.connect('mongodb://localhost:27017/shopping',  { useNewUrlParser: true });   // tijdelijk    dit tijdens het developpen, handmatig
 
 var products = [     // dus hier vullen we het model in met de daadwerkelijk data
     new Product({

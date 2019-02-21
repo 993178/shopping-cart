@@ -7,7 +7,7 @@ var expressHbs = require('express-handlebars'); // vanwege toegevoegd pakket...
 var mongoose = require('mongoose');   // iets met de server
 var session = require('express-session');
 var passport = require('passport');   // voor encryptie
-var flash = require('connet-flash');  // om boodschappen via de view te kunnen doorgeven
+var flash = require('connect-flash');  // om boodschappen via de view te kunnen doorgeven
 var validator = require('express-validator');
 var MongoStore = require('connect-mongo')(session); // voor het winkelwagentje. Na session importeren, want dat is een argument! Is ipv default 'memoryStore' dat alleen voor development bedoeld is
 
@@ -16,7 +16,7 @@ var userRouter = require('./routes/user');    // bij Discount Jonas heet dit Use
 
 
 var app = express();
-mongoose.connect('localhost:27017/shopping');
+mongoose.connect('mongodb://localhost:27017/shopping', { useNewUrlParser: true });
 require('./config/passport');   // pas hierlangs komt index.js te weten dat er een passport.js bestaat met de benodigde info, deze require is in plaats van al die code in dat bestand
 
 // view engine setup
