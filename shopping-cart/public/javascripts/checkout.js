@@ -36,5 +36,28 @@ function stripeResponseHandler() {      // stond ook op Stripesite
         //submit the form to the server
         $form.get(0).submit();
     }
-
 }
+// Discount Jonas doet ook npm install stripe --save
+// en zoekt op die stripeAPI site naar Charges > create a charge
+
+
+
+
+// wat Stripe anno 2019 op de site (https://stripe.com/docs/quickstart) heeft staan: 
+
+// Set your secret key: remember to change this to your live secret key in production
+// See your keys here: https://dashboard.stripe.com/account/apikeys
+var stripe = require("stripe")("sk_test_pQPtnc49JtVufrg3N1lkccT5");
+
+// Token is created using Checkout or Elements!
+// Get the payment token ID submitted by the form:
+const token = request.body.stripeToken; // Using Express
+
+(async () => {
+  const charge = await stripe.charges.create({
+    amount: 999,
+    currency: 'usd',
+    description: 'Example charge',
+    source: token,
+  });
+})();
