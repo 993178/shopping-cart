@@ -1,5 +1,5 @@
 var Product = require('../models/product');
-var mongoose = require('mongoose');             // tijdelijk    Dit is niet de normale gang van zaken voor de app, Maximillian doet
+var mongoose = require('mongoose');             // tijdelijk   Dit is niet de normale gang van zaken voor de app, Maximillian doet
 mongoose.connect('mongodb://localhost:27017/shopping',  { useNewUrlParser: true });   // tijdelijk    dit tijdens het developpen, handmatig
 
 var products = [     // dus hier vullen we het model in met de daadwerkelijk data
@@ -20,7 +20,26 @@ var products = [     // dus hier vullen we het model in met de daadwerkelijk dat
         title: 'nog meer schroefjes',
         description: 'zitten allemaal los',
         price: 4.99
+    }),
+    new Product({
+        imagePath: 'https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fmoerenbout.nl%2Fmedia%2Fcatalog%2Fcategory%2Fschroeven.png&f=1',
+        title: 'losse schroeven',
+        description: 'niet om op te staan',
+        price: 3.99
+    }),
+    new Product({
+        imagePath: 'https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fmoerenbout.nl%2Fmedia%2Fcatalog%2Fcategory%2Fschroeven.png&f=1',
+        title: 'losse schroeven',
+        description: 'ook niet om op te staan',
+        price: 3.99
+    }),
+    new Product({
+        imagePath: 'https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fmoerenbout.nl%2Fmedia%2Fcatalog%2Fcategory%2Fschroeven.png&f=1',
+        title: 'losse schroeven',
+        description: 'ook al niet om op te staan',
+        price: 2.99
     })
+
             
 ];
 

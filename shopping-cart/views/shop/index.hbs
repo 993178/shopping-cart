@@ -1,10 +1,10 @@
 {{!-- <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
-<a href="#" class="btn btn-primary" role="button">Button</a> stond naast andere thumbnailbutton --}}
+<a href="#" class="btn btn-primary" role="button">Button</a> stond naast andere thumbnailbutton  --}}
 
 {{!-- we willen door de producten loopen om ze te renderen, maar we weten niet hoeveel het er zijn en we willen ze per 3 in een row krijgen, niet meer --}}
 
-{{# each producten }}
+{{# each products }}
     <div class="row">
 
         {{# each this }}
@@ -16,7 +16,7 @@
                     <h3>{{ this.title }}</h3>
                     <p class="description">{{ this.description }}</p>
                     <div class="clearfix">
-                        <div class="price pull-left">€{{ this.price }}</div>
+                        <div class="price pull-left">{{ this.price }}</div>
                         <a href="/add-to-cart/{{this._id}}" class="btn btn-success pull-right" role="button">Add to shopping cart</a>
                     </div>
                 </div>
