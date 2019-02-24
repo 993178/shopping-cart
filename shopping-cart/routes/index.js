@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Product = require('../models/product');   // productmodel binnenhalen (het schema, niet dat seedergedoe) 
 var Cart = require('../models/cart');
+var Order = require('../models/order');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -32,6 +33,24 @@ router.get('/add-to-cart/:id', function(req, res, next) {   // Discount Jonas: n
   });
 });
 
+router.get('/reduce/:id', function(req, res, next) {
+  var productId = req.params.id;
+  var cart = new Cart(req.session.cart ? req.session.cart : { items: {}});  // nieuw karretje maken en daar oud karretje ingooien als argument - ALS die bestaat, anders een leeg object. Je kunt hier ook een mal van maken: {items: {}, totalQty: 0, totalPrice: 0} ipv de pipe operators in cart.js die Discount Jonas prefereert
+
+  cart.reduceByOne(productId);
+  req.session.cart = cart;
+  res.redirect('/shopping-cart');
+});
+
+router.get('/remove/:id', function(req, res, next) {
+  var productId = req.params.id;
+  var cart = new Cart(req.session.cart ? req.session.cart : { items: {}});  // nieuw karretje maken en daar oud karretje ingooien als argument - ALS die bestaat, anders een leeg object. Je kunt hier ook een mal van maken: {items: {}, totalQty: 0, totalPrice: 0} ipv de pipe operators in cart.js die Discount Jonas prefereert
+
+  cart.removeItem(productId);
+  req.session.cart = cart;
+  res.redirect('/shopping-cart');
+});
+
 router.get('/shopping-cart', function(req, res, next) {
   if (!req.session.cart) {
     return res.render('shop/shopping-cart', {products: null});
@@ -40,7 +59,7 @@ router.get('/shopping-cart', function(req, res, next) {
   res.render('shop/shopping-cart', {products: cart.generateArray(), totalPrice: cart.totalPrice});
 });
 
-router.get('/checkout', function(req, res, next) {    // komt vanaf shopping-cart.hbs
+router.get('/checkout', isLoggedIn, function(req, res, next) {    // komt vanaf shopping-cart.hbs
   if (!req.session.cart) {
     return res.redirect('/shopping-cart');
   }
@@ -49,14 +68,14 @@ router.get('/checkout', function(req, res, next) {    // komt vanaf shopping-car
   res.render('shop/checkout', {total: cart.totalPrice, errMsg: errMsg, noError: !errMsg});    // we geven errMsg door en checken in noError of ie falsy is, zo ja, dan is noError truthy en geeft checkout.hbs het error-element niet weer...
 });
 
-router.post('/checkout', function(req, res, next) {
+router.post('/checkout', isLoggedIn, function(req, res, next) {   // isLoggedIn > dat je dus ingelogd moet zijn, zie de uit user.js gekopieerde functie onderaan
   if (!req.session.cart) {
     return res.redirect('/shopping-cart');    // als je geen cart hebt, optiefen
   }
   var cart = new Cart(req.session.cart);      // weer cart recreëren (kun je dat woord nog letterlijk gebruiken?)
 
   // van de Stripe-site! 2019-proof! Woehoe
-  var stripe = require("stripe")("sk_test_pQPtnc49JtVufrg3N1lkccT5");   // I heard there was a secret key that David played and it pleased uhm, me
+  var stripe = require("stripe")("sk_test_pQPtnc49JtVufrg3N1lkccT5");   // I heard there was a secret key that David played and it pleased uhm, me       de geheime key dus - voor het echie heb je een andere (zie Stripe-account)
 
   stripe.charges.create({
     amount: cart.totalPrice * 100,     // in centen!
@@ -69,13 +88,33 @@ router.post('/checkout', function(req, res, next) {
       req.flash('error', err.message);
       return res.redirect('/checkout');
     }
-    req.flash('success', 'Koop gesloten!')    // Wordt op /-pagina weergegeven! zie regel 8
-    req.session.cart = null;    // kar leeggooien - ik neem aan dat die ||-operators dit opvatten als 'pak optie 2'
-    res.redirect('/');
+    var order = new Order({
+      user: req.user,     // passport slaat user op in request... En: dit kan alleen maar omdat we straks gebruikers gaan dwingen om in te loggen voor ze iets kopen...! 
+      cart: cart,
+      address: req.body.address, // en om hier de adresinfo vandaan te halen, moet er een name-veld zijn in het html-element address in checkout.hbs :-S          req.body is waar Express values opslaat die via een postreq zijn verstuurd...
+      name: req.body.name,
+      paymentId: charge.id // komt uit het object charge in de callback. Hier rechts (https://stripe.com/docs/api/charges/create) staat ook een voorbeeld van de response met dus dat id-veld erin
+    });
+    order.save(function(err, result) {          // err wordt niet gehandled!
+      req.flash('success', 'Koop gesloten!')    // Wordt op /-pagina weergegeven! zie regel 8
+      req.session.cart = null;    // kar leeggooien - ik neem aan dat die ||-operators dit opvatten als 'pak optie 2'
+      res.redirect('/');  
+    });
   });
 });
 
 module.exports = router;
+
+function isLoggedIn(req, res, next) {     // als je niet bent ingelogd ga je maar lekker naar - niet meer de homepage maar de sign in page
+  if (req.isAuthenticated()) {
+      return next();
+  }
+  req.session.oldUrl = req.url;     // dus we slaan op als OldUrl in de sessie, waar we eerst waren (/checkout)
+  res.redirect('/user/signin');
+};
+
+
+
 
 
 

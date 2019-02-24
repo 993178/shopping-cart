@@ -14,6 +14,23 @@ module.exports = function Cart(oldCart) {     // oldCart is het winkelwagentje s
         storedItem.price = storedItem.item.price * storedItem.qty;  // direct prijs maal aantal - is dat slim     nee
         this.totalQty++;
         this.totalPrice += storedItem.item.price;   // met item ertussen, anders is dat oude bedrag ook al vermenigvuldigd met het aantal
+    };
+
+    this.reduceByOne = function(id) {               // het lijkt me logisch in de cart ook de mogelijkheid toe te voegen er eentje BIJ te doen, dus dit maar dan met + overal
+        this.items[id].qty--;
+        this.items[id].price -= this.items[id].item.price;
+        this.totalQty--;
+        this.totalPrice -= this.items[id].item.price;
+
+        if (this.items[id].qty <= 0) {              // als we 0 exemplaren kopen, hoeft ie niet meer in dat lijstje (om het over -1 exemplaar nog maar niet te hebben!)
+            delete this.items[id];
+        }
+    };
+
+    this.removeItem = function(id) {
+        this.totalQty -= this.items[id].qty;
+        this.totalPrice -= this.items[id].price;
+        delete this.items[id];
     }
 
     this.generateArray = function() {   // en hier wil hij een array maken van de items, maar ik kan niet volgen wat het daarvoor dan was!
@@ -22,7 +39,7 @@ module.exports = function Cart(oldCart) {     // oldCart is het winkelwagentje s
             arr.push(this.items[id]);
         }
         return arr;
-    }
+    };
 };
 // wat ie probeert te doen, is een winkelwagentje creëren dat bij toevoeging van een product zichzelf opnieuw creëert met dat nieuwe product, zodat dubbele items gegroepeerd worden en je dus '2 brood, melk, suiker, eieren' te zien krijgt en niet 'brood, melk, suiker, brood, eieren'
 
