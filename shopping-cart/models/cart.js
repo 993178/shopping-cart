@@ -44,3 +44,38 @@ module.exports = function Cart(oldCart) {     // oldCart is het winkelwagentje s
 // wat ie probeert te doen, is een winkelwagentje creëren dat bij toevoeging van een product zichzelf opnieuw creëert met dat nieuwe product, zodat dubbele items gegroepeerd worden en je dus '2 brood, melk, suiker, eieren' te zien krijgt en niet 'brood, melk, suiker, brood, eieren'
 
 // (tip bij dev problems: Ctrl+Shift+J > Resources > Cookies > delete connect-dinges cookie. Anders onthoudt ie de sessie waarbij er dingen niet klopten (NaN enzo))
+
+
+
+
+
+
+
+/* <li class="nav-item dropdown">
+<a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <i class="fa fa-user" aria-hidden="true"></i> User
+</a>
+<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+  {{!-- bij Discount Jonas is dit een ul met li's, hier dus een div met a's --}}
+  {{# if login}}
+    <a class="dropdown-item" href="/user/profile">Gebruikersprofiel</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="/user/logout">Uitloggen</a>
+  {{ else }}
+    <a class="dropdown-item" href="/user/signin">Inloggen</a>
+    <a class="dropdown-item" href="/user/signup">Account aanmaken</a>
+  {{/if}}
+</div>
+</li>
+<li class="nav-item">
+<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+</li>
+
+
+
+buiten de ul:
+
+<form class="form-inline my-2 my-lg-0">
+<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form> */

@@ -13,32 +13,20 @@
           <span class="badge badge-pill badge-danger">{{session.cart.totalQty}}</span>
         </a>
       </li>
-      {{!-- <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li> --}}
-      <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fa fa-user" aria-hidden="true"></i> User
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          {{!-- bij Discount Jonas is dit een ul met li's, hier dus een div met a's --}}
-          {{# if login}}
-            <a class="dropdown-item" href="/user/profile">Gebruikersprofiel</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/user/logout">Uitloggen</a>
-          {{ else }}
-            <a class="dropdown-item" href="/user/signin">Inloggen</a>
-            <a class="dropdown-item" href="/user/signup">Account aanmaken</a>
-          {{/if}}
-        </div>
-      </li>
-      {{!-- <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-      </li> --}}
+      {{# if login}}
+        <li class="nav-item active">
+          <a class="nav-link" href="/user/profile">Gebruikersprofiel</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/user/logout">Uitloggen</a>
+        </li>
+      {{ else }}
+        <li class="nav-item active">
+          <a class="nav-link" href="/user/signin">Inloggen</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/user/signup">Account aanmaken</a></li>
+      {{/if}}
     </ul>
-    {{!-- <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form> --}}
   </div>
 </nav>

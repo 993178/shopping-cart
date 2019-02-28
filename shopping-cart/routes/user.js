@@ -1,4 +1,6 @@
 // ROUTES/USER.JS
+var cookieParser = require('cookie-parser'); //poging
+
 
 var express = require('express');
 var router = express.Router();
@@ -7,8 +9,12 @@ var passport = require('passport');
 var Order = require('../models/order');
 var Cart = require('../models/cart');
 
-csrfProtection = csrf();
+csrfProtection = csrf({ cookie: true });    // poging; () was leeg
+var parseForm = express.urlencoded({ extended: false }) //poging
 router.use(csrfProtection);
+
+// https://www.npmjs.com/package/csurf
+// wat moet ik met "app.use(cookieParser())"? Dit is niet app. Moet cookieParser op iets anders? Moet ik app importeren?
 
 router.get('/profile', isLoggedIn, function(req, res, next) {     // isLoggedIn beschermt deze route; je kunt alleen op /profile komen als je bent ingelogd, zie de functie beneden
   Order.find({user: req.user}, function(err, orders) {            // find: the mongoose way of quering the database, en we zoeken orders met dezelfde user als deze ingelogde user in de req (van passport), waarbij mongoose snugger genoeg is om te beseffen dat ie req.user.id moet hebben

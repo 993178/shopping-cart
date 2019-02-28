@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
 router.get('/add-to-cart/:id', function(req, res, next) {   // Discount Jonas: next kun je altijd weglaten als je die niet gebruikt, hij zet hem neer want conventie
   var productId = req.params.id;
   var cart = new Cart(req.session.cart ? req.session.cart : { items: {}});  // nieuw karretje maken en daar oud karretje ingooien als argument - ALS die bestaat, anders een leeg object. Je kunt hier ook een mal van maken: {items: {}, totalQty: 0, totalPrice: 0} ipv de pipe operators in cart.js die Discount Jonas prefereert
-
+  console.log(cart);
   Product.findById(productId, function(err, product) {
     if (err) {
       return res.redirect('/');   // nogal summier - er gaat iets fout en je wordt teruggestuurd naar de homepage...
@@ -121,14 +121,28 @@ function isLoggedIn(req, res, next) {     // als je niet bent ingelogd ga je maa
 // nog doen...
 
 // 1) die fn-foutmelding mbt bootstrap (die is misschien ook verantwoordelijk voor #2  )
-// 2) ik wil mijn dropdown! >:-(      Anders opties als li's in ul zetten? Komen ze allemaal naast elkaar op de navbar, maar lekker boeiend
+//    -StackOverflow geprobeerd, alles met andere frameworks enzo 
+//    -Gaan die fn-dingen altijd over jquery? Want in util.js wordt jquery wel degelijk gerequired
+//    -...moet ik jquery installeren?
+//    -jquery geïnstalleerd, gerequired in app.js en checkout.js (Stripe-functie gebruikt $)
+//        in package.json vóór de andere dingen in de lijst dependencies gezet. 
+//        Geen verandering. >>> duh, die troep staat al in layout.hbs
+
+// script execution error (denken we )
+
+// 2) ik wil mijn dropdown! >:-(
+//      -Fuck de dropdown, zet ze als li-items op de navbar, who cares
+// 2b) test of sign in en sign up het wel doen...
+//    -dropdown omgezet in deel navbar, links naar signin en signup doen het
+//    -signup zelf > invalid csrf token 403 ForbiddenError: invalid csrf token
+//    > tutorial code checken op al die csrf-gerelateerde shit
+//    > csrf zelf opzoeken, is alles nog wel up-to-date???
+//    - zie user.js
 
 // 3) add to cart-knop doet het niet
+//    -check final code van index.js, index.hbs, cart.js
+// 3b) test of shopping cart het wel doet...
 
-// 4) test of sign in en sign up het wel doen...
+// 4) zoek 2019-equivalent van Stripe-functie
+// 4b) test of checkout het dan doet (met dummydata van Stripe)
 
-// 5) test of shopping cart het wel doet...
-
-// 6) zoek 2019-equivalent van Stripe-functie
-
-// 7) kijk of checkout het dan doet (met dummydata van Stripe)
