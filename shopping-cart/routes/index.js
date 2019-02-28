@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Product = require('../models/product');   // productmodel binnenhalen (het schema, niet dat seedergedoe) 
+var Product = require('../models/product');   // productmodel binnenhalen (het schema, niet dat seedergedoe)  
 var Cart = require('../models/cart');
 var Order = require('../models/order');
 
@@ -118,31 +118,60 @@ function isLoggedIn(req, res, next) {     // als je niet bent ingelogd ga je maa
 
 
 
-// nog doen...
+// Doen:
 
-// 1) die fn-foutmelding mbt bootstrap (die is misschien ook verantwoordelijk voor #2  )
-//    -StackOverflow geprobeerd, alles met andere frameworks enzo 
-//    -Gaan die fn-dingen altijd over jquery? Want in util.js wordt jquery wel degelijk gerequired
-//    -...moet ik jquery installeren?
-//    -jquery geïnstalleerd, gerequired in app.js en checkout.js (Stripe-functie gebruikt $)
-//        in package.json vóór de andere dingen in de lijst dependencies gezet. 
-//        Geen verandering. >>> duh, die troep staat al in layout.hbs
+// Wil ik dit alles in een aparte map en aparte github doen? Dat het origineel van Discount Jonas bewaard blijft?
+//  ...liever wel ja
+// nieuwe github repository aanmaken
+// klonen in aparte map voor het daadwerkelijke project
+// alles uit huidige map erin flikkeren
 
-// script execution error (denken we )
+// signupfunctie verwijderen
+// links naar sign up, sign in, gebruikerspagina en uitloggen verwijderen van homepagina
 
-// 2) ik wil mijn dropdown! >:-(
-//      -Fuck de dropdown, zet ze als li-items op de navbar, who cares
-// 2b) test of sign in en sign up het wel doen...
-//    -dropdown omgezet in deel navbar, links naar signin en signup doen het
-//    -signup zelf > invalid csrf token 403 ForbiddenError: invalid csrf token
-//    > tutorial code checken op al die csrf-gerelateerde shit
-//    > csrf zelf opzoeken, is alles nog wel up-to-date???
-//    - zie user.js
+// view en route maken voor nieuwe beheerderspagina (...waarvan de /naam geheim moet blijven... dus dan moet ik hem niet op github zetten... voorlopig maar /geheimepagina)
+// inlog- en uitlogfunctie verplaatsen naar beheerderspagina. 
+// uitlogfunctie ook weer voorwaardelijk tonen
+ 
+// gebruikersprofiel ombouwen tot beheerderspagina voor Ria en Coen
+// formulier voor toevoegen van product...
+// > naam product, categorie (iets met dropdown en beperkte keuzes), grootte, beschrijving, prijs, aantal per verpakking/doosje/etc, foto, aantal producten in voorraad (moet dat nog semi-automatisch omlaag gaan bij een aankoop?)
+// mogelijkheid product te verwijderen...
 
-// 3) add to cart-knop doet het niet
-//    -check final code van index.js, index.hbs, cart.js
-// 3b) test of shopping cart het wel doet...
+// producten in categorieën onderbrengen... 
+// huidige categorieën: beveiliging, zonwering, gereedschappen, ijzerwaren, tuinartikelen, sierbeslag  (slijpservice en sleutels lijken me niet langer van toepassing...)
+// routes maken voor al die categorieën (nou ja de relevante dan). Ook een overige?
+// hoe krijg je mongo zover dat ie dingen in categorieën bewaart? Of moet ik de categorie als eigenschap aan het product toevoegen en dan de categoriepagina met een find(categorie-eigenschap) doen ofzo?? 
+//    Of maak ik aparte Schema's voor al die categorieën? Dat is achter de schermen misschien wel het handigst...! Dat ze bij het toevoegen van een nieuw product meteen al moeten zeggen wat het wordt, met aangepaste velden voor dat product
 
-// 4) zoek 2019-equivalent van Stripe-functie
-// 4b) test of checkout het dan doet (met dummydata van Stripe)
+// zoekfunctie terugbrengen in navbar (bootstrap? hoe werkt zo'n ding)?
 
+// nadenken over hoe afhandelen bestelling moet verlopen... 
+//  > denk dat een e-mail naar R&C het handigst is voor ze, iets met 'er is op [datum, tijd] een/meerdere [naam producten] besteld, neem contact op via [mailadres of telefoonnummer]'
+
+// -moeten gebruikers via de website kunnen betalen en hun adresgegevens achterlaten, zodat Ria en Coen het dan standaard opsturen?
+//       > bij opsturen krijg je met verzendkosten te maken, hoe doen we dat? Die verschillen per grootte/gewicht van het pakje, en zijn bij meerdere items weer minder dan simpelweg de som der delen
+// -doen we het meer zoals Marktplaats, dat de koper een berichtje stuurt met achterlating van mailadres of telefoonnummer dat ie iets wil kopen en Ria en Coen dan contact opnemen (mailen, bellen?) over hoe en wat?
+
+// afmaken Stripe-functie voor iDeal?
+// bestellingsformulier verbeteren? > adres met aparte straat, huisnummer, toevoeging, plaatsnaam en postcode, mailadres of telefoonnummer, of de optie om het op te halen (dat Ria en Coen contact opnemen om het adres door te geven?)
+
+// verzinnen hoe website eruit moet zien - voortbouwen op bestaand ontwerpje of ... ?
+// foto maken van assortimentskast (achtergrond), frontaanzicht laatje, zijaanzicht laatje
+
+
+// Kleuren Coendoen:
+
+//  #260085 #208 midnightblue hsl(257,100,26) rgb(38,0,133)
+
+//  #de0000 #e00 red hsl(0,100,43) rgb(222,0,0)
+
+//  #5254a4 #55a darkslateblue hsl(238,33,48) rgb(82,84,164)
+
+//  #feab00 #fb0 orange hsl(40,100,49) rgb(254,171,0)
+
+
+
+
+// Uiteindelijk moet het iets zijn waarmee R&C zelf uit de voeten kunnen en waarmee klanten zonder al te veel gedoe iets kunnen kopen.
+// En waar geen ladingen onderhoud aan gepleegd hoeft te worden...
